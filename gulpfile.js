@@ -48,7 +48,7 @@ function bundle() {
     .pipe(concat('bundle.js'))
     .pipe(!prod ? sourcemaps.write('.') : gutil.noop())
     .pipe(prod ? streamify(uglify()) : gutil.noop())
-    .pipe(gulp.dest('./build/js'))
+    .pipe(gulp.dest('./docs/js'))
     .pipe(browserSync.stream());
 }
 
@@ -57,7 +57,7 @@ gulp.task('html', function() {
   return gulp.src('./src/templates/**/*')
     .pipe(injectPartials())
     .pipe(processhtml())
-    .pipe(gulp.dest('build'))
+    .pipe(gulp.dest('docs'))
     .pipe(browserSync.stream());
 });
 
@@ -73,7 +73,7 @@ gulp.task('sass', function() {
       browsers: ['last 2 versions'],
       cascade: false
     }) : gutil.noop())
-    .pipe(gulp.dest('./build/stylesheets'))
+    .pipe(gulp.dest('./docs/stylesheets'))
     .pipe(browserSync.stream());
 });
 
@@ -81,7 +81,7 @@ gulp.task('sass', function() {
 gulp.task('serve', function() {
   browserSync.init({
     server: {
-      baseDir: './build'
+      baseDir: './docs'
     }
   });
 
@@ -90,5 +90,5 @@ gulp.task('serve', function() {
   gulp.watch('./src/scss/**/*.scss', ['sass']);
 });
 
-// use gulp-sequence to finish building html, sass and js before first page load
+// use gulp-sequence to finish docsing html, sass and js before first page load
 gulp.task('default', gulpSequence(['html', 'sass', 'js'], 'serve'));
